@@ -6,7 +6,7 @@
 
 | 工具 | 用途 | 状态 |
 |------|------|------|
-| [GDB](gdb/) | C/C++ 源码级调试器 | 🚧 进行中 |
+| [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 实验 01 已就绪 |
 | ASan (AddressSanitizer) | 内存错误检测 | 📋 计划中 |
 | perf | 性能分析 (CPU profiling) | 📋 计划中 |
 | strace | 系统调用追踪 | 📋 计划中 |
@@ -20,11 +20,9 @@
 ```
 debug-learning-lab/
 ├── gdb/                  # GDB 调试实验
-│   ├── README.md         #   实验说明与引导
-│   ├── 01-basics/        #   基础：断点、单步、查看变量
-│   ├── 02-breakpoints/   #   断点进阶：条件断点、观察点
-│   ├── 03-coredump/      #   Core dump 分析
-│   ├── 04-multithread/   #   多线程调试
+│   ├── README.md         #   模块总览与学习路线
+│   ├── 01-hello-gdb/     #   实验 01：第一次接触 GDB
+│   ├── 02-breakpoints/   #   实验 02：断点（规划中）
 │   └── ...
 ├── asan/                 # AddressSanitizer 实验（规划中）
 ├── perf/                 # perf 实验（规划中）
@@ -50,12 +48,12 @@ gdb --version
 ### 开始第一个实验
 
 ```bash
-cd gdb/01-basics/
+cd gdb/01-hello-gdb/
 make
-gdb ./program
+gdb ./hello
 ```
 
-每个实验目录都包含独立的 `README.md`，引导你一步步完成实验。
+然后跟着 [实验教程](gdb/01-hello-gdb/README.md) 一步步操作。
 
 ### 使用 Docker（无需本地安装工具）
 
