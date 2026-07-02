@@ -1,7 +1,5 @@
-# Build artifacts
+# Build artifacts (通用)
 *.o
-*.out
-*.exe
 *.a
 *.so
 *.dylib
@@ -22,14 +20,9 @@ vgcore.*
 *~
 .DS_Store
 
-# Compiled executables (每个实验目录下的可执行文件)
-gdb/*/program
-gdb/*/main
-gdb/*/test_*
-perf/*/program
-perf/*/main
-asan/*/program
-asan/*/main
+# ─── 每个实验目录有自己的 .gitignore ───
+# 采用白名单模式：忽略目录下所有文件，只放行源码、文档、构建文件
+# 这样无论可执行文件叫什么名字都会被自动忽略
 
 # Perf output
 perf.data
@@ -45,9 +38,6 @@ valgrind-*.log
 # strace / ltrace output
 *.strace
 *.ltrace
-
-# FlameGraph / SVG outputs (可保留也可忽略)
-*.svg
 
 # Temporary files
 /tmp/
