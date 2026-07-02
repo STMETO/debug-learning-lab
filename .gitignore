@@ -1,0 +1,56 @@
+# Build artifacts
+*.o
+*.out
+*.exe
+*.a
+*.so
+*.dylib
+
+# Debug info
+*.dSYM/
+
+# Core dumps
+core
+core.*
+vgcore.*
+
+# Editor & IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled executables (每个实验目录下的可执行文件)
+gdb/*/program
+gdb/*/main
+gdb/*/test_*
+perf/*/program
+perf/*/main
+asan/*/program
+asan/*/main
+
+# Perf output
+perf.data
+perf.data.old
+*.perf
+
+# Perfetto traces
+*.perfetto-trace
+
+# Valgrind logs
+valgrind-*.log
+
+# strace / ltrace output
+*.strace
+*.ltrace
+
+# FlameGraph / SVG outputs (可保留也可忽略)
+*.svg
+
+# Temporary files
+/tmp/
+*.tmp
+*.bak
+*.orig
