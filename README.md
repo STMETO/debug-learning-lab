@@ -7,7 +7,7 @@
 | 工具 | 用途 | 状态 |
 |------|------|------|
 | [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 12 个实验全部就绪 |
-| ASan (AddressSanitizer) | 内存错误检测 | 📋 计划中 |
+| [ASan](asan/) (AddressSanitizer) | 内存错误检测 | 📋 8 个实验已规划 |
 | perf | 性能分析 (CPU profiling) | 📋 计划中 |
 | strace | 系统调用追踪 | 📋 计划中 |
 | ltrace | 库函数调用追踪 | 📋 计划中 |
