@@ -47,7 +47,7 @@ CFLAGS = -g -Wall -Wextra -fsanitize=address -fno-omit-frame-pointer
 make
 ```
 
-> 没有任何警告或错误——编译器不会发现这个 bug。只有**运行时**擦会暴露。
+> 没有任何警告或错误——编译器不会发现这个 bug。只有**运行时**才会暴露。
 
 ### 第三步：运行
 
