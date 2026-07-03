@@ -8,9 +8,9 @@
 |------|------|------|
 | [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 12 个实验全部就绪 |
 | [ASan](asan/) (AddressSanitizer) | 内存错误检测 | ✅ 10 个实验全部就绪 |
-| [strace](strace/) | 系统调用追踪 | 📋 8 个实验已规划 |
+| [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
+| [ltrace](ltrace/) | 库函数调用追踪 | 📋 6 个实验已规划 |
 | perf | 性能分析 (CPU profiling) | ⏸️ 需原生 Linux（WSL2 暂不支持） |
-| ltrace | 库函数调用追踪 | 📋 计划中 |
 | perfetto / trace-cmd | 内核与用户态追踪 | 📋 计划中 |
 | Valgrind | 内存泄漏与错误检测 | 📋 计划中 |
 | bpftrace / eBPF | 动态内核/用户态追踪 | 📋 计划中 |
