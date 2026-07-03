@@ -1,0 +1,27 @@
+# ── ASan 抑制文件示例 ──────────────────────────
+# 每行格式: 函数名_或_模式
+#
+# 简单格式（匹配调用栈中的函数名）:
+#   function_name
+#
+# 精确格式（指定错误类型 + 函数名）:
+#   fun:function_name
+#
+# 全局格式（匹配所有错误类型）:
+#   *:function_name
+
+# 抑制 known_overflow 函数中的所有 ASan 错误
+# （这个 arr[3]=999 是已知的历史遗留问题，暂时不修）
+known_overflow
+
+# ================================================
+# 常见抑制模式参考:
+#
+# 抑制特定错误类型:
+#   heap-buffer-overflow:leaky_function
+#
+# 抑制整个源文件中的所有错误:
+#   src/legacy/old_code.c
+#
+# 抑制第三方库中的错误:
+#   *:third_party/lib_we_cant_fix
