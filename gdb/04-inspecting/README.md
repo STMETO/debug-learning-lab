@@ -206,9 +206,10 @@ $19 = 110
 (gdb) print primes[2] + primes[3]
 $20 = 12                          # 5 + 7
 
-(gdb) print strlen(word)
-$21 = 5
+(gdb) print sizeof(word)
+$21 = 6                           # "hello" = 5 个字符 + 1 个 '\0'
 ```
+> `sizeof(word)` = 6 但肉眼只看到 5 个字母——多出来的 1 字节是 C 字符串末尾的 `'\0'`（null 终止符）。这就是"hello"实际占用的内存大小。
 
 ---
 
@@ -240,6 +241,7 @@ $21 = 5
 | `print word` 显示乱码 | 停在变量**初始化之前**了 | 确保停在初始化语句之后 |
 | `print *ptr_int` 报 `Cannot access memory` | 指针为 `NULL` 或未初始化 | 先 `print ptr_int` 看地址是否为 0 |
 | `info locals` 看不到全局变量 | `info locals` 只看**局部**变量 | 全局变量直接用 `print` |
+| `print strlen(x)` 导致 GDB 崩溃 | `strlen`/`memcpy`/`memset` 是 glibc 的 IFUNC 函数，GDB 无法调用 | 用 `print sizeof(x)` 或 `print x` 代替 |
 
 ---
 

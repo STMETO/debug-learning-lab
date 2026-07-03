@@ -21,7 +21,7 @@ void examine_data(int count, double ratio, const char *label) {
     char   word[]   = "hello";
 
     // 结构体
-    struct Student stu;
+    struct Student stu = {0};
     strcpy(stu.name, "Alice");
     stu.age   = 20;
     stu.score = 92.5;
