@@ -7,9 +7,9 @@
 | 工具 | 用途 | 状态 |
 |------|------|------|
 | [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 12 个实验全部就绪 |
-| [ASan](asan/) (AddressSanitizer) | 内存错误检测 | 📋 8 个实验已规划 |
-| perf | 性能分析 (CPU profiling) | 📋 计划中 |
-| strace | 系统调用追踪 | 📋 计划中 |
+| [ASan](asan/) (AddressSanitizer) | 内存错误检测 | ✅ 10 个实验全部就绪 |
+| [strace](strace/) | 系统调用追踪 | 📋 8 个实验已规划 |
+| perf | 性能分析 (CPU profiling) | ⏸️ 需原生 Linux（WSL2 暂不支持） |
 | ltrace | 库函数调用追踪 | 📋 计划中 |
 | perfetto / trace-cmd | 内核与用户态追踪 | 📋 计划中 |
 | Valgrind | 内存泄漏与错误检测 | 📋 计划中 |
@@ -20,13 +20,10 @@
 
 ```
 debug-learning-lab/
-├── gdb/                  # GDB 调试实验
-│   ├── README.md         #   模块总览与学习路线
-│   ├── 01-hello-gdb/     #   实验 01：第一次接触 GDB
-│   ├── 02-breakpoints/   #   实验 02：断点（规划中）
-│   └── ...
-├── asan/                 # AddressSanitizer 实验（规划中）
-├── perf/                 # perf 实验（规划中）
+├── gdb/                  # GDB 调试实验（✅ 12 个实验）
+├── asan/                 # ASan 内存检测实验（✅ 10 个实验）
+├── strace/               # strace 系统调用追踪（📋 8 个实验）
+├── perf/                 # perf 性能分析（规划中）
 └── ...
 ```
 
