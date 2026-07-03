@@ -1,0 +1,53 @@
+# ── GDB 配置文件示例 ──────────────────────────────
+# 将此文件复制为 ~/.gdbinit（全局）或本目录下的 .gdbinit（项目）
+#   cp gdbinit.example .gdbinit    # 项目级（本目录内生效）
+#   cp gdbinit.example ~/.gdbinit  # 全局（所有 GDB 会话）
+
+# 1. 关闭启动时的版权声明（清净一点）
+set startup-quietly on
+
+# 2. 历史记录：记住你输入过的命令
+set history save on
+set history size 1000
+set history filename ~/.gdb_history
+
+# 3. 分页：长输出不要每屏暂停
+set pagination off
+
+# 4. 打印设置
+set print pretty on            # 结构体/数组的排版更好看
+set print array-indexes on     # 显示数组索引: [0] = 1, [1] = 2
+set print elements 0           # 不截断长字符串和数组
+
+# 5. 反汇编风格（Intel 语法通常比 AT&T 更易读）
+set disassembly-flavor intel
+
+# 6. 自动加载：允许项目目录下的 .gdbinit
+set auto-load local-gdbinit on
+
+# ── 自定义命令 ────────────────────────────────────
+
+# 快捷命令：打印所有重要信息
+define pinfo
+    printf "── 参数 ──\n"
+    info args
+    printf "── 局部变量 ──\n"
+    info locals
+end
+
+# 快捷命令：查看所有线程的简要状态
+define tinfo
+    info threads
+end
+
+# 快捷命令：保存断点到文件
+define bsave
+    save breakpoints ~/.gdb_breakpoints
+    printf "断点已保存到 ~/.gdb_breakpoints\n"
+end
+
+# 快捷命令：从文件加载断点
+define bload
+    source ~/.gdb_breakpoints
+    printf "断点已从 ~/.gdb_breakpoints 加载\n"
+end
