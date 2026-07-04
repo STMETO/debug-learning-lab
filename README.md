@@ -10,10 +10,11 @@
 | [ASan](asan/) (AddressSanitizer) | 内存错误检测 | ✅ 10 个实验全部就绪 |
 | [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
 | [ltrace](ltrace/) | 库函数调用追踪 | ✅ 6 个实验全部就绪 |
-| [Valgrind](valgrind/) | 内存错误与泄漏检测 | 📋 5 个实验已规划 |
-| perf | 性能分析 (CPU profiling) | ⏸️ 需原生 Linux（WSL2 暂不支持） |
+| [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
+| [perf](perf/) | 性能分析 (CPU profiling) | 🚧 13 个实验已规划，开发中 |
+| ftrace | 内核函数追踪 | 📋 计划中 |
 | perfetto / trace-cmd | 内核与用户态追踪 | 📋 计划中 |
-| bpftrace / eBPF | 动态内核/用户态追踪 | 📋 计划中 |
+| bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 | git | 代码仓库管理工具 | 📋 计划中 |
 
 ## 项目结构
@@ -22,8 +23,10 @@
 debug-learning-lab/
 ├── gdb/                  # GDB 调试实验（✅ 12 个实验）
 ├── asan/                 # ASan 内存检测实验（✅ 10 个实验）
-├── strace/               # strace 系统调用追踪（📋 8 个实验）
-├── perf/                 # perf 性能分析（规划中）
+├── strace/               # strace 系统调用追踪（✅ 8 个实验）
+├── ltrace/               # ltrace 库函数调用追踪（✅ 6 个实验）
+├── valgrind/             # Valgrind 内存错误检测（✅ 5 个实验）
+├── perf/                 # perf 性能分析（🚧 13 个实验规划中）
 └── ...
 ```
 
@@ -78,15 +81,18 @@ docker run -it --privileged \
 | 基础模式 | `--cap-add=SYS_PTRACE --security-opt seccomp=unconfined` | gdb, strace, ltrace, valgrind |
 | 全功能模式 | `--privileged -v /lib/modules:/lib/modules:ro` | 以上全部 + perf, bpftrace |
 
+> ⚠️ **perf 模块注意**：perf 需要 WSL2 原生 shell 环境，Docker 容器内 `perf_event_open()` 系统调用受限。详见 [perf 模块 README](perf/README.md)。
+
 容器启动后会自动进入实验目录，所有工具可直接使用。
 
 ## 学习路线
 
 1. **GDB** — 从源码级调试开始，建立最直观的调试心智模型
-2. **Sanitizers** — 理解内存错误类型及其检测原理
-3. **strace / ltrace** — 从系统调用层面观察程序行为
-4. **perf** — 从 CPU 角度分析性能瓶颈
-5. **perfetto / eBPF** — 深入内核，追踪复杂系统中的问题
+2. **ASan** — 理解内存错误类型及其检测原理
+3. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
+4. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
+5. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
+6. **ftrace / perfetto** — 深入内核，追踪复杂系统中的问题
 
 ## 贡献
 
