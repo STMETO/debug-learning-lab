@@ -25,14 +25,13 @@
 |------|------|---------|
 | 1 | `strcpy` 写入超长字符串 | 不安全的 C 字符串操作 |
 | 2 | 循环中 `scores[5]` 越界 | 边界条件错误 |
-| 3 | `memcpy` 拷贝过多字节 | 错误的 sizeof 计算 |
+| 3 | `memcpy` 拷贝过多字节 | 错误的 sizeof 计算 → 意外重叠 |
 
 ```bash
 make
-./stack 1    # strcpy 溢出
-./stack 2    # 循环越界
-./stack 3    # memcpy 溢出
-```
+./stack 1    # strcpy 溢出 → stack-buffer-overflow
+./stack 2    # 循环越界 → stack-buffer-overflow
+./stack 3    # memcpy 重叠 → memcpy-param-overlap
 
 ---
 
@@ -102,14 +101,43 @@ This frame has 1 object(s):
 
 `scores` 是 5 个 `int` = 20 字节，偏移 52 = 32 + 20，所以越界确实在 `scores` 结束后。
 
-### 模式 3：memcpy 栈溢出 —— `./stack 3`
+### 模式 3：memcpy-param-overlap —— `./stack 3`
 
 ```c
-int dest[3];                 // 3 个 int = 12 字节
-memcpy(dest, src, 10 * sizeof(int));  // 拷贝 40 字节 → 严重越界
+int dest[3];                        // 3 个 int = 12 字节，栈偏移 [48, 60)
+int src[10] = {1,2,3,4,5,6,7,8,9,10}; // 10 个 int = 40 字节，栈偏移 [80, 120)
+
+memcpy(dest, src, 10 * sizeof(int)); // 拷贝 40 字节到只能装 12 字节的 dest
 ```
 
-报告会显示 `dest` 是 `[?, ?)` 区间，访问越界了几十个字节。这种 bug 通常来自错误的 `sizeof` 计算——比如把 `sizeof(dest)` 写成了 `sizeof(src)`。
+实际运行报告：
+
+```
+=================================================================
+==...==ERROR: AddressSanitizer: memcpy-param-overlap: memory ranges
+  [0x...00,0x...28) and [0x...20,0x...48) overlap
+```
+
+**为什么不是 `stack-buffer-overflow`？** ASan 有多个检查器，`memcpy-param-overlap` 的检查优先级更高：
+
+```
+memcpy 写入范围: [48, 88)   ← 从 dest 开始写 40 字节
+memcpy 读取范围: [80, 120)  ← 从 src 开始读 40 字节
+                       ↑
+               [80, 88) 重叠！← ASan 先检测到这个，报 memcpy-param-overlap
+```
+
+> 如果 `dest` 和 `src` 在内存中相距足够远（不重叠），ASan 会继续运行，然后在写越界处报 `stack-buffer-overflow`。
+
+报告中的栈帧信息验证了这一点：
+
+```
+This frame has 2 object(s):
+  [48, 60) 'dest'  ← dest 只有 12 字节，写 40 字节必然越界
+  [80, 120) 'src'  ← src 的读范围被写入覆盖了
+```
+
+修复：只要把 `dest` 扩到足够大——`int dest[10]`——或者把 `memcpy` 的第三个参数改为 `sizeof(dest)`。
 
 ---
 

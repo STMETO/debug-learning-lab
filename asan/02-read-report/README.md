@@ -57,6 +57,7 @@ WRITE of size 4 at 0x503000000054 thread T0
 > | `double-free` | 重复释放 |
 > | `global-buffer-overflow` | 全局变量越界 |
 > | `stack-use-after-return` | 使用了已返回函数的局部变量 |
+> | `memcpy-param-overlap` | memcpy 的源和目标内存区域重叠 |
 
 ### 段二：调用栈 —— 最重要的部分
 
