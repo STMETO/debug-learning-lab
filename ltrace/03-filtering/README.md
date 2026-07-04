@@ -47,7 +47,7 @@ wc -l /tmp/full.log
 ### 第二步：按函数名过滤——只看字符串函数
 
 ```bash
-ltrace -e strlen+strdup+strchr ./mixed 2>&1 | grep 'mixed->'
+ltrace -e strlen+strdup+strchr ./mixed | grep 'mixed->'
 ```
 
 输出（只有 5 行）：
@@ -65,7 +65,7 @@ mixed->strlen("memory test data")              = 16
 ### 第三步：按函数名过滤——只看内存函数
 
 ```bash
-ltrace -e memset+memcpy+memcmp+malloc+free ./mixed 2>&1 | grep 'mixed->'
+ltrace -e memset+memcpy+memcmp+malloc+free ./mixed | grep 'mixed->'
 ```
 
 输出：
@@ -97,7 +97,7 @@ ltrace 支持三种过滤层级：
 **按库过滤**（只看 libc 调用）：
 
 ```bash
-ltrace -e @libc.so.6 ./mixed 2>&1 | head -10
+ltrace -e @libc.so.6 ./mixed| head -10
 ```
 
 **排除某个库**：

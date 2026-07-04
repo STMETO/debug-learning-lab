@@ -124,7 +124,7 @@ $6 = 240       ← 50 + 90 + 100 = 240（加了 100！）
 ### 场景 2：ltrace 看调用链，GDB 看缓冲区
 
 ```bash
-ltrace -e strlen+malloc+strcpy+strcat+free ./dual 2>&1 | grep 'dual->'
+ltrace -e strlen+malloc+strcpy+strcat+free ./dual | grep 'dual->'
 ```
 
 输出：

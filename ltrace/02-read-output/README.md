@@ -129,7 +129,7 @@ libc.so.6->strlen("")           = ...   ← libc 内部也在用 strlen
 **过滤技巧**：只想看你的代码的直接调用？`grep 'decode->'` 过滤掉 libc 内部噪音。
 
 ```bash
-ltrace ./decode 2>&1 | grep 'decode->'
+ltrace ./decode | grep 'decode->'
 ```
 
 输出只保留你的代码产生的调用：
