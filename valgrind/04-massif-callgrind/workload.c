@@ -2,64 +2,64 @@
 #include <stdlib.h>
 #include <string.h>
 
-// ── Massif & Callgrind 双工具演示 ──
-// Massif: 堆内存剖析 —— 看"程序在哪个阶段用了多少堆内存"
-// Callgrind: 调用图性能分析 —— 看"CPU 时间花在哪个函数上"
+// ── Massif & Callgrind Dual Tool Demo ──
+// Massif: heap memory profiling -- see "how much heap memory the program uses at each phase"
+// Callgrind: call graph performance analysis -- see "which function CPU time is spent on"
 
-// 一个 CPU 密集型的函数（Callgrind 会显示它很"热"）
+// A CPU-intensive function (Callgrind will show it as "hot")
 long compute_fibonacci(int n) {
     if (n <= 1) return n;
     return compute_fibonacci(n - 1) + compute_fibonacci(n - 2);
 }
 
-// 一个内存密集型的函数（Massif 会显示堆增长）
+// A memory-intensive function (Massif will show heap growth)
 char *build_report(int id, const char *text) {
     size_t len = strlen(text);
-    // 每次调用分配新内存——Massif 会追踪堆的波浪形变化
+    // Each call allocates new memory -- Massif will track the wave-like changes of the heap
     char *report = (char *)malloc(len + 64);
     snprintf(report, len + 64, "[Report #%d] %s", id, text);
     return report;
 }
 
 int main() {
-    printf("=== Massif & Callgrind 演示 ===\n\n");
+    printf("=== Massif & Callgrind Demo ===\n\n");
 
-    // ── 阶段 1：CPU 密集型（Callgrind 关注） ──
-    printf("【阶段 1】CPU 密集型 —— 计算 fibonacci(40)\n");
+    // ── Phase 1: CPU-intensive (Callgrind focus) ──
+    printf("[Phase 1] CPU-intensive -- computing fibonacci(40)\n");
     long fib = compute_fibonacci(40);
     printf("  fibonacci(40) = %ld\n", fib);
 
-    // ── 阶段 2：内存密集型（Massif 关注） ──
-    printf("\n【阶段 2】内存密集型 —— 构建大量报告\n");
+    // ── Phase 2: Memory-intensive (Massif focus) ──
+    printf("\n[Phase 2] Memory-intensive -- building many reports\n");
     char *reports[20];
     for (int i = 0; i < 20; i++) {
         reports[i] = build_report(i, "this is a test report string for memory profiling");
     }
-    printf("  分配了 20 个报告\n");
+    printf("  Allocated 20 reports\n");
 
-    // ── 阶段 3：释放一半（Massif 会看到堆下降） ──
-    printf("\n【阶段 3】释放一半报告\n");
+    // ── Phase 3: Free half (Massif will see heap drop) ──
+    printf("\n[Phase 3] Free half of reports\n");
     for (int i = 0; i < 10; i++) {
         free(reports[i]);
         reports[i] = NULL;
     }
-    printf("  释放了前 10 个\n");
+    printf("  Freed first 10\n");
 
-    // ── 阶段 4：再分配一些（Massif 会看到堆回升） ──
-    printf("\n【阶段 4】再分配一批\n");
+    // ── Phase 4: Allocate more (Massif will see heap rise again) ──
+    printf("\n[Phase 4] Allocate another batch\n");
     char *big_chunk = (char *)malloc(5 * 1024 * 1024);  // 5MB
     memset(big_chunk, 'X', 5 * 1024 * 1024);
-    printf("  分配了 5MB 大块\n\n");
+    printf("  Allocated 5MB large chunk\n\n");
 
-    // 清理（故意留一个报告不释放，作为泄漏演示）
+    // Cleanup (intentionally leave one report unfreed as a leak demo)
     for (int i = 10; i < 19; i++) {
         free(reports[i]);
     }
     free(big_chunk);
-    // ★ reports[19] 没有释放 —— Massif 会看到还有一块留在堆上
+    // ★ reports[19] is not freed -- Massif will see one block still on the heap
 
-    printf("=== 实验结束 ===\n");
-    printf("\nValgrind 运行方式:\n");
+    printf("=== Experiment complete ===\n");
+    printf("\nValgrind usage:\n");
     printf("  Massif:   valgrind --tool=massif ./workload\n");
     printf("  Callgrind: valgrind --tool=callgrind ./workload\n");
     return 0;

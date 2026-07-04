@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
-// ── 各种数据类型，供你练习 print 命令 ──
+// ── 各种data类型，供你练习 print 命令 ──
 
-// 结构体：用来练习打印复合数据类型
+// 结构体：用来练习打印复合data类型
 struct Student {
     char name[32];
     int  age;
@@ -16,7 +16,7 @@ void examine_data(int count, double ratio, const char *label) {
     double local_double = ratio * 2.5;
     char   local_char   = 'Z';
 
-    // 数组
+    // array
     int    primes[] = {2, 3, 5, 7, 11};
     char   word[]   = "hello";
 
@@ -26,12 +26,12 @@ void examine_data(int count, double ratio, const char *label) {
     stu.age   = 20;
     stu.score = 92.5;
 
-    // 指针
+    // pointer
     int  *ptr_int   = &local_int;
-    int  *ptr_array = primes;  // 指向数组首元素
+    int  *ptr_array = primes;  // 指向array首元素
 
-    // ★ 重点观察点：在这里设断点，然后练习各种 print 用法
-    printf("=== 检查点 ===\n");
+    // ★ 重点观察点：在这里设断点，然后练习各种 print Usage
+    printf("=== Checkpoint ===\n");
     printf("count=%d, ratio=%.2f, label=%s\n", count, ratio, label);
     printf("local_int=%d, local_double=%.2f, local_char=%c\n",
            local_int, local_double, local_char);

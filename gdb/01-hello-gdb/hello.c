@@ -13,7 +13,7 @@ int main() {
     // 调用 add 函数
     int sum = add(x, y);
 
-    // 打印结果
+    // 打印result
     printf("x = %d, y = %d, sum = %d\n", x, y, sum);
 
     return 0;

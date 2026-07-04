@@ -1,57 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// ── 未初始化值检测 —— Valgrind 的独家超能力 ──
-// ASan 检测不到这类 bug，编译器警告也可能遗漏
-// 但 Valgrind 能精确追踪"值从未初始化到被使用"的完整路径
+// ── Uninitialized value detection -- Valgrind's exclusive superpower ──
+// ASan cannot detect this type of bug, compiler warnings may also miss it
+// But Valgrind can precisely trace the complete path of "value from uninitialized to use"
 
-// 场景 1：条件分支依赖于未初始化的值
+// Scenario 1: conditional branch depends on uninitialized value
 void branch_on_uninit() {
-    printf("【场景 1】分支依赖未初始化值\n");
+    printf("[Scenario 1] Branch depends on uninitialized value\n");
 
-    int x;  // ★ 没有初始化！
+    int x;  // ★ not initialized!
 
     if (x > 0) {        // Valgrind: "Conditional jump or move depends on uninitialised value(s)"
-        printf("  x 是正数: %d\n", x);
+        printf("  x is positive: %d\n", x);
     } else {
-        printf("  x 是零或负数: %d\n", x);
+        printf("  x is zero or negative: %d\n", x);
     }
 }
 
-// 场景 2：未初始化值作为函数参数
+// Scenario 2: uninitialized value used as function argument
 void use_uninit_as_arg() {
-    printf("【场景 2】未初始化值作为参数\n");
+    printf("[Scenario 2] Uninitialized value as argument\n");
 
-    int scores[10];     // ★ 没有初始化！
+    int scores[10];     // ★ not initialized!
     int total = 0;
 
-    // 只填充了前 5 个，忘记填充后 5 个
+    // Only filled first 5, forgot to fill the last 5
     for (int i = 0; i < 5; i++) {
         scores[i] = i * 10;
     }
 
-    // ★ 后 5 个元素是垃圾值，但被用来计算了
+    // ★ Last 5 elements are garbage values, but are used in calculation
     for (int i = 0; i < 10; i++) {
         total += scores[i];
     }
-    printf("  total = %d （可能每次运行结果都不同！）\n", total);
+    printf("  total = %d (result may differ each run!)\n", total);
 }
 
-// 场景 3：未初始化的堆内存
+// Scenario 3: uninitialized heap memory
 void uninit_heap() {
-    printf("【场景 3】未初始化的堆内存\n");
+    printf("[Scenario 3] Uninitialized heap memory\n");
 
-    char *buf = (char *)malloc(32);  // malloc 不清零！
-    // ★ buf 的内容是随机的——没调 memset 或直接用 calloc
+    char *buf = (char *)malloc(32);  // malloc does not zero!
+    // ★ buf content is random -- no memset or calloc used
 
-    // 使用 buf 中的垃圾值做 strlen
-    size_t len = strlen(buf);   // Valgrind: strlen 读取了未初始化数据
-    printf("  strlen(未初始化buf) = %zu （肯定是错的）\n", len);
+    // Using garbage values in buf for strlen
+    size_t len = strlen(buf);   // Valgrind: strlen reads uninitialized data
+    printf("  strlen(uninitialized buf) = %zu (definitely wrong)\n", len);
 
     free(buf);
 }
 
-// 场景 4：部分初始化的结构体
+// Scenario 4: partially initialized struct
 struct Point {
     int x;
     int y;
@@ -59,20 +59,20 @@ struct Point {
 };
 
 void partially_init_struct() {
-    printf("【场景 4】部分初始化的结构体\n");
+    printf("[Scenario 4] Partially initialized struct\n");
 
     struct Point p;
     p.x = 10;
     p.y = 20;
-    // ★ 忘记初始化 p.z！
+    // ★ forgot to initialize p.z!
 
     int sum = p.x + p.y + p.z;
-    printf("  x+y+z = %d（z 是垃圾值，结果不可预测）\n", sum);
+    printf("  x+y+z = %d (z is garbage, result unpredictable)\n", sum);
 }
 
 int main() {
     printf("╔══════════════════════════════════════╗\n");
-    printf("║  ⭐ Valgrind 独家能力：未初始化值检测 ║\n");
+    printf("║  ⭐ Valgrind Exclusive: Uninitialized Value Detection ║\n");
     printf("╚══════════════════════════════════════╝\n\n");
 
     branch_on_uninit();
@@ -83,6 +83,6 @@ int main() {
     printf("\n");
     partially_init_struct();
 
-    printf("\n=== 实验结束 ===\n");
+    printf("\n=== Experiment complete ===\n");
     return 0;
 }

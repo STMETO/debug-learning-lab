@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-// ── 一个简单但有层次的计算程序 ──
-// 用于演示 TUI 的各种布局和 .gdbinit 配置
+// ── 一个简单但有层的compute程序 ──
+// 用于演示 TUI 的各种布局和 .gdbinit config
 
 long fibonacci(int n) {
     if (n <= 1) return n;
@@ -20,18 +20,18 @@ void analyze_number(int n) {
     long fib = fibonacci(n);
     int prime = is_prime(n);
 
-    printf("数字 %d 的分析:\n", n);
+    printf("Analysis of number %d:\n", n);
     printf("  fibonacci(%d) = %ld\n", n, fib);
-    printf("  是质数吗？%s\n", prime ? "是" : "否");
+    printf("  Is it prime? %s\n", prime ? "Yes" : "No");
 
-    // 如果 fib 是质数，额外输出
+    // 如果 fib Yesprime，额外output
     if (is_prime((int)fib)) {
-        printf("  ★ fibonacci(%d) = %ld 也是质数！\n", n, fib);
+        printf("  ★ fibonacci(%d) = %ld is also prime!\n", n, fib);
     }
 }
 
 int main() {
-    printf("=== GDB TUI 模式演示 ===\n\n");
+    printf("=== GDB TUI Mode Demo ===\n\n");
 
     for (int i = 5; i <= 10; i++) {
         analyze_number(i);

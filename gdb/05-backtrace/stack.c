@@ -6,8 +6,8 @@
 // 在深层递归处设断点，用 backtrace 观察整个调用链
 
 unsigned long long factorial(int n) {
-    // ★ 在这里设断点，每次递归都会停
-    //   用 backtrace 看调用栈如何增长
+    // ★ 在这里设断点，每递归都会停
+    //   用 backtrace 看call stack如何增长
     if (n <= 1) {
         return 1;   // 递归终点
     }
@@ -19,7 +19,7 @@ unsigned long long factorial(int n) {
 // 模拟实际项目中常见的"A调B、B调C、C调D"模式
 
 int layer_d(int x) {
-    // ★ 在这里设断点，看看是谁调用了你
+    // ★ 在这里设断点，看看Yes谁调用了你
     return x * x;
 }
 
@@ -36,11 +36,11 @@ int layer_a(int x) {
 }
 
 int main() {
-    printf("=== 场景一：递归 —— 观察栈的增长 ===\n");
+    printf("=== Scenario 1: Recursion — observe stack growth ===\n");
     unsigned long long fac = factorial(5);
     printf("factorial(5) = %llu\n\n", fac);
 
-    printf("=== 场景二：深层调用链 ===\n");
+    printf("=== Scenario 2: Deep call chain ===\n");
     int result = layer_a(1);
     printf("layer_a(1) = %d\n", result);
 

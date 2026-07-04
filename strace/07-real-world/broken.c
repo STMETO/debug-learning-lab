@@ -5,15 +5,15 @@
 #include <fcntl.h>
 #include <errno.h>
 
-// ── 实战调试实验 ──
+// ── 实战调试Experiment ──
 // 这个程序有 3 个不同的"故障"
 // 不能用 printf 调试，只能用 strace 找出问题
 
-// 故障 1：读取配置文件失败
+// 故障 1：readconfigfile失败
 void read_config() {
-    printf("【场景 1】读取配置文件\n");
+    printf("[Scenario 1] Reading configuration file\n");
 
-    // 尝试打开几个可能的配置文件路径
+    // 尝试打开几个可能的configfile路径
     const char *paths[] = {
         "/etc/myapp/config.ini",
         "./config.ini",
@@ -28,85 +28,85 @@ void read_config() {
             ssize_t n = read(fd, buf, sizeof(buf) - 1);
             if (n > 0) {
                 buf[n] = '\0';
-                printf("  找到配置: %s = %s\n", paths[i], buf);
+                printf("  Found config: %s = %s\n", paths[i], buf);
             }
             close(fd);
             return;
         }
-        // ★ 关键 bug：没有检查 errno！
-        // 如果文件不存在，open 返回 ENOENT
-        // 但如果路径中有目录没有执行权限，返回 EACCES
+        // ★ 关键 bug：没有check errno！
+        // 如果file不存在，open return ENOENT
+        // 但如果路径中有目录没有执行权限，return EACCES
         // 两种情况都被静默忽略了
     }
-    printf("  未找到配置文件（可能原因未知）\n");
+    printf("  No config file found (unknown reason)\n");
 }
 
-// 故障 2：写入日志文件失败 —— 静默忽略
+// 故障 2：writelogfile失败 —— 静默忽略
 void write_log(const char *message) {
-    // ★ BUG：打开文件用于追加，但如果目录不存在会失败
+    // ★ BUG：打开file用于追加，但如果目录不存在会失败
     int fd = open("/var/log/myapp/app.log", O_WRONLY|O_APPEND|O_CREAT, 0644);
 
-    // ★ 另一个 bug：没有检查 open 的返回值！
+    // ★ 另一个 bug：没有check open 的return值！
     if (fd >= 0) {
         write(fd, message, strlen(message));
         write(fd, "\n", 1);
         close(fd);
     }
-    // fd == -1 时静默失败 —— 日志丢了但没人知道
+    // fd == -1 时静默失败 —— log丢了但没人知道
 }
 
-// 故障 3：字符串操作触发了不该有的行为
+// 故障 3：stringoperation触发了不该有的行为
 void process_data() {
-    printf("【场景 3】处理数据\n");
+    printf("[Scenario 3] Processing data\n");
 
-    // 从"标准输入"读取一个数字
+    // 从"标准input"read一numbers in total字
     char input[32];
-    printf("  请输入一个数字: ");
+    printf("  Please enter a number: ");
 
     // ★ 在非交互式环境下，/dev/stdin 可能不存在或不可读
     char *result = fgets(input, sizeof(input), stdin);
     if (result == NULL) {
-        printf("  读取输入失败\n");
+        printf("  Failed to read input\n");
         // strace 会显示 read(0, ...) = -1 以及具体的 errno
         return;
     }
 
     int value = atoi(input);
-    printf("  输入值: %d\n", value);
+    printf("  Input value: %d\n", value);
 
-    // 一个"看似正常"的操作：根据输入打开不同文件
+    // 一个"看似正常"的operation：根据input打开不同file
     char filename[64];
     snprintf(filename, sizeof(filename), "/tmp/data_%d.txt", value);
 
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
         // ★ 可能的 errno: ENOENT, EACCES, ENOTDIR...
-        printf("  无法打开 %s（原因未知）\n", filename);
+        printf("  Cannot open %s (unknown reason)\n", filename);
         return;
     }
 
-    // 假设这里有一些数据处理...
+    // 假设这里有一些dataprocess...
     fclose(fp);
 }
 
 int main() {
     printf("╔════════════════════════════════════╗\n");
-    printf("║   strace 实战调试 —— 找出 bug     ║\n");
+    printf("║   strace debug practice - find bugs ║\n");
     printf("╚════════════════════════════════════╝\n\n");
 
-    // 场景 1：静默失败的文件查找
+    // Scenario 1：静默失败的file查找
     read_config();
 
     printf("\n");
 
-    // 场景 2：静默失败的日志写入
+    // Scenario 2：静默失败的logwrite
     write_log("Application started successfully");
 
     printf("\n");
 
-    // 场景 3：可能因 stdin 问题或路径问题失败
+    // Scenario 3：可能因 stdin 问题或路径问题失败
     process_data();
 
-    printf("\n=== 程序结束 ===\n");
+    printf("\n=== Program finished ===\n");
     return 0;
 }
