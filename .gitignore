@@ -32,6 +32,9 @@ perf.data.old
 # Perfetto traces
 *.perfetto-trace
 
+# Third-party binaries (not tracked in git)
+lib/perfetto/
+
 # Valgrind logs
 valgrind-*.log
 
