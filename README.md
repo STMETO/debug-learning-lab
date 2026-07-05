@@ -11,8 +11,8 @@
 | [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
 | [ltrace](ltrace/) | 库函数调用追踪 | ✅ 6 个实验全部就绪 |
 | [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
-| [perf](perf/) | 性能分析 (CPU profiling) | 🚧 13 个实验已规划，开发中 |
-| ftrace | 内核函数追踪 | 📋 计划中 |
+| [perf](perf/) | 性能分析 (CPU profiling) | ✅ 13 个实验全部就绪 |
+| [ftrace](ftrace/) | 内核函数追踪 | 🚧 10 个实验已规划，开发中 |
 | perfetto / trace-cmd | 内核与用户态追踪 | 📋 计划中 |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 | git | 代码仓库管理工具 | 📋 计划中 |
@@ -26,7 +26,8 @@ debug-learning-lab/
 ├── strace/               # strace 系统调用追踪（✅ 8 个实验）
 ├── ltrace/               # ltrace 库函数调用追踪（✅ 6 个实验）
 ├── valgrind/             # Valgrind 内存错误检测（✅ 5 个实验）
-├── perf/                 # perf 性能分析（🚧 13 个实验规划中）
+├── perf/                 # perf 性能分析（✅ 13 个实验）
+├── ftrace/               # ftrace 内核函数追踪（🚧 6 个实验规划中）
 └── ...
 ```
 
@@ -92,7 +93,8 @@ docker run -it --privileged \
 3. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
 4. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
 5. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
-6. **ftrace / perfetto** — 深入内核，追踪复杂系统中的问题
+6. **ftrace** — 内核函数全量追踪，微秒级延迟分析
+7. **ftrace / perfetto / git** — 更多工具
 
 ## 贡献
 
