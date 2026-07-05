@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Three functions, each with a different performance bottleneck.
 // Run them under "perf stat" and compare the counter signatures.
+//
+// Usage:
+//   ./bottleneck        → run all three functions
+//   ./bottleneck 1      → only compute_bound
+//   ./bottleneck 2      → only memory_bound
+//   ./bottleneck 3      → only branch_heavy
 
 // Bottleneck A: compute-bound — tight arithmetic, predictable branches
 void compute_bound() {
@@ -63,17 +70,39 @@ void branch_heavy() {
     free(data);
 }
 
-int main() {
-    printf("=== Three Bottleneck Patterns ===\n\n");
+int main(int argc, char *argv[]) {
+    int choice = 0;  // 0 = all, 1 = compute, 2 = memory, 3 = branch
 
-    printf("A: compute-bound (tight arithmetic loop)\n");
-    compute_bound();
+    if (argc > 1) {
+        choice = atoi(argv[1]);
+        if (choice < 0 || choice > 3) {
+            printf("Usage: %s [1|2|3]\n", argv[0]);
+            printf("  1 = compute-bound  (tight arithmetic loop)\n");
+            printf("  2 = memory-bound   (strided array access)\n");
+            printf("  3 = branch-heavy   (unpredictable branches)\n");
+            printf("  (no arg)           run all three\n");
+            return 1;
+        }
+    }
 
-    printf("\nB: memory-bound (strided array access)\n");
-    memory_bound();
-
-    printf("\nC: branch-heavy (unpredictable branches)\n");
-    branch_heavy();
+    if (choice == 0) {
+        printf("=== Three Bottleneck Patterns ===\n\n");
+        printf("A: compute-bound (tight arithmetic loop)\n");
+        compute_bound();
+        printf("\nB: memory-bound (strided array access)\n");
+        memory_bound();
+        printf("\nC: branch-heavy (unpredictable branches)\n");
+        branch_heavy();
+    } else if (choice == 1) {
+        printf("=== Bottleneck: Compute-Bound ===\n");
+        compute_bound();
+    } else if (choice == 2) {
+        printf("=== Bottleneck: Memory-Bound ===\n");
+        memory_bound();
+    } else if (choice == 3) {
+        printf("=== Bottleneck: Branch-Heavy ===\n");
+        branch_heavy();
+    }
 
     printf("\n=== Done! ===\n");
     return 0;

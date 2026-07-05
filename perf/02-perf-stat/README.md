@@ -15,7 +15,15 @@
 | `branch_heavy()` | 分支预测密集 | 1000 万次 if-else 用随机数据驱动，分支预测器无法猜测 |
 
 ```bash
-make && ./bottleneck
+make
+
+# 运行全部三个函数（无参数——默认行为）
+./bottleneck
+
+# 或者只跑其中一个（1=计算, 2=内存, 3=分支）
+./bottleneck 1    # 只看 compute_bound
+./bottleneck 2    # 只看 memory_bound
+./bottleneck 3    # 只看 branch_heavy
 ```
 
 输出：
@@ -104,13 +112,13 @@ perf stat -e cycles,instructions,cache-references,cache-misses ./bottleneck
 | **10% ~ 30%** | 偏高 | 大跨度访问、数据结构不够紧凑 |
 | **> 30%** | 缓存效率低 | 随机访问大量数据、链表/哈希表遍历 |
 
-> memory_bound 用步长 1024（4KB）跳跃访问——每次访问几乎必然 cache-miss。compute_bound 则是连续访问，几乎不会 miss。两者一平均得到 15.4%，而 memory_bound 单独跑可能 > 50%。
+> memory_bound 用步长 1024（4KB）跳跃访问——每次访问几乎必然 cache-miss。compute_bound 则是连续访问，几乎不会 miss。两者一平均得到 15.4%，而 memory_bound 单独跑是 22.5%。
 
 要验证这个判断，可以把步长改小再跑一次：
 
 ```bash
 # 修改 bottleneck.c：把 step = 1024 改成 step = 1
-# 重新 make && perf stat -e cache-references,cache-misses ./bottleneck
+# 重新 make && perf stat -e cache-references,cache-misses ./bottleneck 2
 ```
 
 步长 = 1（连续访问）时，cache-miss 比例会大幅下降。
@@ -146,9 +154,56 @@ perf stat -e branch-instructions,branch-misses ./bottleneck
 | **branch-miss%** | 低（< 2%） | 低（< 2%） | 高（> 15%） |
 | **stalled%** | 低（< 10%） | 高（> 30%） | 中等（~15%） |
 
-现在你可以做一个"盲测"：给一个不认识的程序跑 `perf stat`，只看计数器就能猜出它的瓶颈类型。
+现在用命令行参数分别跑三个函数，验证上表是否准确：
 
-动手验证——分别跑三个函数（注释掉另外两个，重新编译），看看每个函数单独的计数器是否匹配上表。
+```bash
+# 1：compute_bound — 计算密集
+perf stat -e cycles,instructions,cache-references,cache-misses,branch-misses ./bottleneck 1
+```
+
+```
+         474456308      cycles
+        1051556096      instructions              #    2.22  insn per cycle   ← IPC 极高！
+            264030      cache-references
+            131631      cache-misses              #   49.855 %                ← 绝对值太小，可忽略
+          50363573      branch-instructions
+             61948      branch-misses             #    0.12% of all branches  ← 几乎完美预测！
+```
+
+```bash
+# 2：memory_bound — 内存密集
+perf stat -e cycles,instructions,cache-references,cache-misses,branch-misses ./bottleneck 2
+```
+
+```
+          77360968      cycles
+          76434280      instructions              #    0.99  insn per cycle   ← IPC 偏低，等内存
+           2052348      cache-references
+            461363      cache-misses              #   22.480 %                ← 缓存在大量 miss
+          11695800      branch-instructions
+           1189007      branch-misses             #   10.17% of all branches  ← 中等
+```
+
+```bash
+# 3：branch_heavy — 分支密集
+perf stat -e cycles,instructions,cache-references,cache-misses,branch-misses ./bottleneck 3
+```
+
+```
+         485057097      cycles
+         394276081      instructions              #    0.81  insn per cycle   ← IPC 偏低
+           9427751      cache-references
+           2552378      cache-misses              #   27.073 %                ← 偏高
+          53852096      branch-instructions
+           8089311      branch-misses             #   15.02% of all branches  ← 🔴 分支预测严重拖累！
+```
+
+**三者的签名一目了然**：
+- `compute_bound`（参数 1）：IPC 2.22 + branch-miss 0.12% → 纯计算，CPU 在高效运转
+- `memory_bound`（参数 2）：IPC 0.99 + cache-miss 22% → 在等内存，缓存不够用
+- `branch_heavy`（参数 3）：IPC 0.81 + branch-miss 15% → 分支预测失败率高
+
+现在你可以做一个"盲测"：给一个不认识的程序跑 `perf stat`，只看计数器就能猜出它的瓶颈类型。
 
 ### 第六步：诊断公式速查
 
@@ -186,11 +241,11 @@ perf stat -e branch-instructions,branch-misses ./bottleneck
 
 ## 🧪 试试看
 
-1. 把 `memory_bound` 的步长从 1024 改成 1（连续访问）、64（每 256 字节跳一次）、4096（每 16KB 跳一次），cache-miss 比例分别怎么变？
-2. 把 `branch_heavy` 的数据改成全 0（`data[i] = 0`）——分支全走同一方向。branch-miss 变成多少？为什么预测器能完美预测？
-3. 在三个函数间加一些 `sleep(1)`——`task-clock` 会增加吗？`cycles` 会增加吗？为什么？
-4. `perf stat -e L1-dcache-load-misses,L1-dcache-loads ./bottleneck`——L1 缓存的事件你的环境支持吗？（`<not supported>` 说明被 WSL2 虚拟化限制）
-5. 用 `perf stat -r 5 ./bottleneck` 跑 5 次——计算 IPC 的平均值和方差。波动有多大？为什么会有波动？
+1. 把 `memory_bound` 的步长从 1024 改成 1（连续访问）、64（每 256 字节跳一次）、4096（每 16KB 跳一次），分别跑 `perf stat -e cache-references,cache-misses ./bottleneck 2`——cache-miss 比例分别怎么变？
+2. 把 `branch_heavy` 的数据改成全 0（`data[i] = 0`，分支全走同一方向）——`perf stat -e branch-misses ./bottleneck 3` 看到的 branch-miss 变成多少？为什么预测器能完美预测？
+3. 在三个函数间加一些 `sleep(1)`——用 `./bottleneck` 跑全部，`task-clock` 会增加吗？`cycles` 会增加吗？为什么？
+4. `perf stat -e L1-dcache-load-misses,L1-dcache-loads ./bottleneck 2`——只跑内存密集型，L1 缓存的事件你的环境支持吗？（`<not supported>` 说明被 WSL2 虚拟化限制）
+5. 用 `perf stat -r 5 ./bottleneck 1` 跑 5 次 compute_bound——计算 IPC 的平均值和方差。波动有多大？为什么 compute_bound 的 IPC 最稳定？
 
 ---
 
@@ -198,11 +253,15 @@ perf stat -e branch-instructions,branch-misses ./bottleneck
 
 | 命令 | 作用 |
 |------|------|
-| `perf stat ./program` | 默认事件集：task-clock, cycles, instructions, branches, branch-misses |
+| `perf stat ./bottleneck` | 运行全部三个函数——三种瓶颈的平均 |
 | `perf stat -e 事件列表 ./program` | 自定义事件 |
 | `perf stat -d ./program` | 详细模式：额外显示 L1 缓存事件 |
 | `perf stat -r N ./program` | 跑 N 次取平均 |
 | `perf stat -p <PID>` | 附加到已运行的进程 |
+| `./bottleneck 1` | 只跑计算密集型（IPC 高、branch-miss 低） |
+| `./bottleneck 2` | 只跑内存密集型（cache-miss 高、IPC 低） |
+| `./bottleneck 3` | 只跑分支密集型（branch-miss > 15%） |
+| `./bottleneck` | 三个全跑（默认） |
 | `perf list hw` | 列出硬件事件 |
 
 ---
