@@ -13,7 +13,7 @@
 | [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
 | [perf](perf/) | 性能分析 (CPU profiling) | ✅ 13 个实验全部就绪 |
 | [ftrace](ftrace/) | 内核函数追踪 | ✅ 10 个实验全部就绪 |
-| [perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | 🚧 8 个实验已规划，开发中 |
+| [perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | ✅ 8 个实验全部就绪 |
 | perfetto / trace-cmd | 内核与用户态追踪 | 📋 计划中 |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 | git | 代码仓库管理工具 | 📋 计划中 |
