@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -Wextra
+CFLAGS = -g -Wall -Wextra -fno-omit-frame-pointer
 
 analyzer: analyzer.c
 	$(CC) $(CFLAGS) -o analyzer analyzer.c

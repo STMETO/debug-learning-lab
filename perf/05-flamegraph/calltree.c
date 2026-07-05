@@ -79,13 +79,19 @@ void phase_compute(int *a, int *b, int n) {
 }
 
 // ----- phase_sort helpers -----
-// Quick sort — recursive, will show stacked boxes in flame graph
+// Quick sort — recursive, will show stacked boxes in flame graph.
+// Uses random pivot to guarantee balanced recursion (~log₂ n depth).
 
 int partition(int *arr, int low, int high) {
-    int pivot = arr[high];
+    // Random pivot: swap a random element with arr[high] to avoid worst-case
+    int pi = low + (rand() % (high - low + 1));
+    int pv = arr[pi];
+    arr[pi] = arr[high];
+    arr[high] = pv;
+
     int i = low - 1;
     for (int j = low; j < high; j++) {
-        if (arr[j] < pivot) {
+        if (arr[j] < pv) {
             i++;
             int tmp = arr[i];
             arr[i] = arr[j];
@@ -107,9 +113,9 @@ void quick_sort(int *arr, int low, int high) {
 }
 
 void phase_sort(int *arr, int n) {
-    // Sort several times to make it visible
-    for (int r = 0; r < 20; r++) {
-        // Reset to semi-random order each time
+    // Sort many rounds of a small array to keep recursion depth shallow.
+    // n=50 → max recursion ~6 with random pivot, well within frame pointer limits.
+    for (int r = 0; r < 4000; r++) {
         for (int i = 0; i < n; i++) {
             arr[i] = (arr[i] * 1103515245 + 12345) % 10007;
         }
@@ -151,7 +157,7 @@ void phase_report(int *arr, int n) {
 int main() {
     printf("=== FlameGraph Demo: Multi-Level Call Tree ===\n");
 
-    int n = 10000;
+    int n = 50;  // small array → ~6 levels max recursion, never hits stack depth limit
     int *a = (int *)malloc(n * sizeof(int));
     int *b = (int *)malloc(n * sizeof(int));
     if (!a || !b) {

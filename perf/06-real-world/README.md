@@ -225,12 +225,12 @@ for (int i = 0; i < n; i++) {
 ```bash
 # 优化前
 perf record -g -o perf_before.data ./analyzer
-perf script -i perf_before.data | stackcollapse-perf.pl | flamegraph.pl > before.svg
+perf script -i perf_before.data | lib/FlameGraph/stackcollapse-perf.pl | lib/FlameGraph/flamegraph.pl > before.svg
 
 # 修改代码后
 make
 perf record -g -o perf_after.data ./analyzer
-perf script -i perf_after.data | stackcollapse-perf.pl | flamegraph.pl > after.svg
+perf script -i perf_after.data | lib/FlameGraph/stackcollapse-perf.pl | lib/FlameGraph/flamegraph.pl > after.svg
 ```
 
 在浏览器中并排打开 `before.svg` 和 `after.svg`，你会看到三个热点函数的宽度都明显变窄。

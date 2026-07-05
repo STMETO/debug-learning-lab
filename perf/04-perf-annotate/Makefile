@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -Wextra
+CFLAGS = -g -Wall -Wextra -fno-omit-frame-pointer
 
 hotspot: hotspot.c
 	$(CC) $(CFLAGS) -o hotspot hotspot.c

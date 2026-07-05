@@ -51,11 +51,11 @@ Step 3: medium_sort (moderate work)
 ```
 时间线 →
 CPU:  ═══hot_calc══╗  ═══medium_sort══╗  ══hot_calc══╗  ═══medium_sort══╗ ...
-                    ║                  ║              ║                  ║
-采    ↓     ↓  ↓      ↓   ↓    ↓  ↓  ↓    ↓     ↓  ↓   ↓    ↓  ↓  ↓  ↓    ↓
-样点  ·     ·  ·      ·   ·    ·  ·  ·    ·     ·  ·   ·    ·  ·  ·  ·    ·
-                    ↑                  ↑              ↑                  ↑
-              hot_calc 占多数    medium_sort 占多数   ...
+                   ║                  ║              ║                  ║
+        ↓     ↓  ↓      ↓   ↓    ↓  ↓  ↓    ↓     ↓  ↓   ↓    ↓  ↓  ↓  ↓    ↓
+采样点  ·     ·  ·      ·   ·    ·  ·  ·    ·     ·  ·   ·    ·  ·  ·  ·    ·
+                ↑                  ↑              ↑                  ↑
+          hot_calc 占多数    medium_sort 占多数   ...
 
 统计：hot_calc = 380 次采样 / 665 = 57.22%
       medium_sort = 272 次采样 / 665 = 40.86%

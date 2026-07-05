@@ -66,20 +66,22 @@ make && ./calltree
 
 ## 实验开始
 
-### 第一步：安装 FlameGraph 工具
+### 第一步：确认 FlameGraph 工具
 
-FlameGraph 是 Brendan Gregg 开源的一套 Perl 脚本，没有 apt 包，直接从 GitHub 下载：
+FlameGraph 是 Brendan Gregg 开源的一套 Perl 脚本，已作为 git submodule 存放在项目的 `lib/FlameGraph/` 目录下。
 
 ```bash
-# 下载到当前实验目录（或放到 ~/bin 全局使用）
-git clone https://github.com/brendangregg/FlameGraph.git
-# 如果 git clone 太慢，也可以只下载两个核心脚本：
-# wget https://raw.githubusercontent.com/brendangregg/FlameGraph/master/stackcollapse-perf.pl
-# wget https://raw.githubusercontent.com/brendangregg/FlameGraph/master/flamegraph.pl
-# chmod +x stackcollapse-perf.pl flamegraph.pl
+# 克隆项目时一并拉取 submodule
+git submodule update --init
+
+# 确认两个核心脚本可用
+ls lib/FlameGraph/stackcollapse-perf.pl lib/FlameGraph/flamegraph.pl
+
+# 确保系统有 perl（已预装）
+which perl
 ```
 
-> 确保系统有 `perl`：`which perl`。这两个脚本只有几百行 Perl，没有其他依赖。
+> 这两个脚本只有几百行 Perl，没有其他依赖。路径指向项目根目录的 `lib/FlameGraph/`，不需要全局安装。
 
 ### 第二步：采集带调用栈的样本
 
@@ -107,10 +109,10 @@ Phase 3: report (15% of CPU)...
 perf script -i perf.data > out.perf-script
 
 # 步骤 2：折叠调用栈（stackcollapse）
-./FlameGraph/stackcollapse-perf.pl out.perf-script > out.folded
+lib/FlameGraph/stackcollapse-perf.pl out.perf-script > out.folded
 
 # 步骤 3：生成 SVG
-./FlameGraph/flamegraph.pl out.folded > flamegraph.svg
+lib/FlameGraph/flamegraph.pl out.folded > flamegraph.svg
 ```
 
 每一步做了什么：
@@ -229,7 +231,7 @@ flamegraph.svg (交互式 SVG，浏览器打开)                 [~200KB]
 |------|------|------|
 | 火焰图中只有 `[unknown]` | 编译时没加 `-g` | 加 `-g` 重新编译 |
 | 火焰图很"矮"（只有 1-2 层） | `perf record` 没加 `-g` | 重新 `perf record -g` |
-| `stackcollapse-perf.pl: not found` | 没下载 FlameGraph 脚本 | `git clone https://github.com/brendangregg/FlameGraph.git` |
+| `stackcollapse-perf.pl: not found` | submodule 未拉取 | `git submodule update --init` |
 | SVG 在浏览器中是空白 | 生成过程中某步文件为空 | 检查 `out.perf-script` 是否有内容 |
 | `--call-graph dwarf` 报错 | WSL2 中 libunwind 可能未安装 | 用默认的 fp 模式（`-g`） |
 | `perf script` 输出中有 `[unknown]` | 内核或没有调试符号的库 | 正常——关注用户态函数即可 |

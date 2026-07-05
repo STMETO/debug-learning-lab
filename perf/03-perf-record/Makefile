@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -Wextra
+CFLAGS = -g -Wall -Wextra -fno-omit-frame-pointer
 
 workload: workload.c
 	$(CC) $(CFLAGS) -o workload workload.c

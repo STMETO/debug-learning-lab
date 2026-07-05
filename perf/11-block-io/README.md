@@ -12,8 +12,8 @@
 
 ```
 应用程序 → write() → VFS → 文件系统 → 块层(bio) → IO 调度器 → 磁盘驱动 → 磁盘
-                                                                    ↑
-                                              block tracepoint 在这里追踪
+                                        ↑
+                  block tracepoint 在这里追踪
 ```
 
 当程序调用 `write()` 时，数据不是立即写到磁盘的——内核先写入页缓存（page cache），标记为"脏页"，稍后由后台线程刷到磁盘。只有 `fsync()` 或页缓存压力足够大时，才真正触发块层 IO。
