@@ -71,7 +71,7 @@ EOF
 ### 第二步：录制 CPU profile
 
 ```bash
-sudo lib/perfetto/tracebox -c cpu_config.txt --txt -o cpu_trace.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c cpu_config.txt --txt -o cpu_trace.perfetto-trace &
 ./cpu_demo
 wait
 ```
@@ -92,7 +92,7 @@ Phase 3: compute_loop again (20M iterations)...
 ### 第三步：SQL 分析 CPU profile
 
 ```bash
-TP="lib/perfetto/trace_processor_shell cpu_trace.perfetto-trace"
+TP="../../lib/perfetto/trace_processor_shell cpu_trace.perfetto-trace"
 ```
 
 **查询 1：采样总数和调用栈覆盖率**
@@ -164,7 +164,7 @@ perf record -g -o perf.data ./cpu_demo
 perf report --stdio | head -15
 
 # 方式 B：Perfetto linux.perf
-sudo lib/perfetto/tracebox -c cpu_config.txt --txt -o cpu_trace.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c cpu_config.txt --txt -o cpu_trace.perfetto-trace &
 ./cpu_demo && wait
 ```
 

@@ -37,11 +37,11 @@ make && ./hello
 
 ```bash
 # tracebox 是 all-in-one 工具（内嵌 traced + traced_probes + perfetto CLI）
-lib/perfetto/tracebox --version
+../../lib/perfetto/tracebox --version
 # Perfetto v57.1
 
 # trace_processor_shell 是 SQL 分析引擎
-lib/perfetto/trace_processor_shell --version
+../../lib/perfetto/trace_processor_shell --version
 # Perfetto v57.1
 ```
 
@@ -52,7 +52,7 @@ lib/perfetto/trace_processor_shell --version
 Perfetto 用 **protobuf text format**（`.txt` 配置文件）描述"追踪什么"：
 
 ```bash
-cat > hello_config.txt << 'EOF'
+cat > ./hello_config.txt << 'EOF'
 # Perfetto trace config —— 告诉 tracebox：追踪什么、追踪多久
 buffers: {
     size_kb: 4096                     # 4 MB 环形缓冲区
@@ -86,7 +86,7 @@ duration_ms: 5000     ← 录制时长（毫秒），不指定则手动 Ctrl+C �
 
 ```bash
 # tracebox 在后台录制 5 秒，同时运行我们的程序
-sudo lib/perfetto/tracebox -c hello_config.txt --txt -o hello.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c hello_config.txt --txt -o hello.perfetto-trace &
 ./hello
 wait
 ```
@@ -112,7 +112,7 @@ Batch 3: 50 file ops...
 echo 'SELECT name, count(*) as cnt
 FROM ftrace_event
 GROUP BY name
-ORDER BY cnt DESC;' | lib/perfetto/trace_processor_shell hello.perfetto-trace
+ORDER BY cnt DESC;' | ../../lib/perfetto/trace_processor_shell hello.perfetto-trace
 ```
 
 输出：
@@ -224,10 +224,10 @@ cat trace                              → SQL: SELECT * FROM ftrace_event
 
 | 命令 | 作用 |
 |------|------|
-| `lib/perfetto/tracebox --version` | 确认工具版本 |
-| `sudo lib/perfetto/tracebox -c config.txt --txt -o output.trace` | 录制 trace |
-| `echo 'SELECT ...' \| lib/perfetto/trace_processor_shell trace.file` | SQL 查询 |
-| `echo '.tables' \| lib/perfetto/trace_processor_shell trace.file` | 列出所有表 |
+| `../../lib/perfetto/tracebox --version` | 确认工具版本 |
+| `sudo ../../lib/perfetto/tracebox -c config.txt --txt -o output.trace` | 录制 trace |
+| `echo 'SELECT ...' \| ../../lib/perfetto/trace_processor_shell trace.file` | SQL 查询 |
+| `echo '.tables' \| ../../lib/perfetto/trace_processor_shell trace.file` | 列出所有表 |
 | Perfetto UI `ui.perfetto.dev` | 浏览器可视化 |
 
 ---
@@ -240,7 +240,7 @@ cat trace                              → SQL: SELECT * FROM ftrace_event
 | `.perfetto-trace` 只有几百字节、SQL 查询为空 | `traced` 没有正确启动或权限不足 | 用 `sudo tracebox`（all-in-one 最可靠） |
 | `Failed to setup event triggers` | WSL2 不支持某些 ftrace trigger | 无视——不影响事件采集 |
 | Perfetto UI 打不开 trace | 文件路径包含非 ASCII 或浏览器安全限制 | 拖入文件，或用 `--httpd` 本地服务 |
-| `tracebox: command not found` | 不在 PATH 中 | 用 `lib/perfetto/tracebox`（相对/绝对路径） |
+| `tracebox: command not found` | 不在 PATH 中 | 用 `../../lib/perfetto/tracebox`（相对/绝对路径） |
 
 ---
 

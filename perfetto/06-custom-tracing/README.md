@@ -130,7 +130,7 @@ data_sources: {
 duration_ms: 4000
 EOF
 
-sudo lib/perfetto/tracebox -c custom_config.txt --txt -o custom_trace.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c custom_config.txt --txt -o custom_trace.perfetto-trace &
 sudo ./trace_app
 wait
 ```

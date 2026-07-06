@@ -97,8 +97,8 @@ EOF
 
 ```bash
 # 在原生 Linux 中执行（WSL2 不支持）
-sudo lib/perfetto/tracebox -c heap_config.txt --txt -o heap_trace.perfetto-trace &
-LD_PRELOAD=lib/perfetto/libheapprofd_glibc_preload.so ./heap_demo
+sudo ../../lib/perfetto/tracebox -c heap_config.txt --txt -o heap_trace.perfetto-trace &
+LD_PRELOAD=../../lib/perfetto/libheapprofd_glibc_preload.so ./heap_demo
 wait
 ```
 
@@ -118,7 +118,7 @@ Allocated 100MB, sleeping 2s for heapprofd to capture...
 ### 第四步：SQL 分析 heap profile
 
 ```bash
-TP="lib/perfetto/trace_processor_shell heap_trace.perfetto-trace"
+TP="../../lib/perfetto/trace_processor_shell heap_trace.perfetto-trace"
 ```
 
 **查询 1：按调用栈看分配总量**
@@ -224,7 +224,7 @@ heapprofd **不是 100% 追踪**每次 malloc——它按 `sampling_interval_byt
 
 | 命令 | 作用 |
 |------|------|
-| `LD_PRELOAD=lib/perfetto/libheapprofd_glibc_preload.so ./prog` | 启动 heapprofd 追踪的程序 |
+| `LD_PRELOAD=../../lib/perfetto/libheapprofd_glibc_preload.so ./prog` | 启动 heapprofd 追踪的程序 |
 | `process_cmdline: "name"` | 指定目标进程（heapprofd 只追踪匹配的进程） |
 | `sampling_interval_bytes: N` | 每 N 字节采样一次（越小 = 越精确 + 越慢） |
 | `heaps: "libc.malloc"` | 只追踪 libc 的 malloc/free |

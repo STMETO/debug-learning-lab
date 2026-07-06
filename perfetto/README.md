@@ -118,11 +118,14 @@ lib/perfetto/trace_processor_shell --version
 
 ## 学习路线图
 
-### 🟢 阶段一：初次接触（实验 01–02）
+> 📌 **先完成 [实验 00：UI 完全指南](00-ui-guide/)**——学会看 Perfetto 可视化界面。所有后续实验都依赖 UI。
+
+### 🟢 阶段一：初次接触（实验 00–02）
 
 | # | 实验 | 你会学到 | 时长 |
 |---|------|---------|------|
-| [01](01-hello-perfetto/) | Hello Perfetto | 安装工具链、启动 `traced` 守护进程、用 `perfetto` CLI 录制第一条 trace、在 Perfetto UI 中打开 `.perfetto-trace` 文件 | ~15min |
+| [00](00-ui-guide/) | 🔑 UI 完全指南 | 读懂 CPU Scheduling / ftrace Events / Process Tracks / Perf Counters 五种轨道；缩放、搜索、框选、点击详情；slice vs instant vs counter 三种视觉形态 | ~15min |
+| [01](01-hello-perfetto/) | Hello Perfetto | 安装工具链、用 `tracebox` 录制第一条 trace、在 Perfetto UI 中打开 `.perfetto-trace` 文件 | ~15min |
 | [02](02-ftrace-integration/) | 内核事件追踪 | 用 Perfetto 采集 ftrace 事件（对比 ftrace 模块的实验 03）、理解 Perfetto 的 trace config 文件格式、用 SQL 查询 ftrace 事件 | ~20min |
 
 > 学完这两个实验，你能用 Perfetto 录制内核事件并在时间轴上查看——和 ftrace 互补，但可视化更好。

@@ -74,7 +74,7 @@ EOF
 ```
 
 ```bash
-sudo lib/perfetto/tracebox -c fullstack_config.txt --txt -o fullstack.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c fullstack_config.txt --txt -o fullstack.perfetto-trace &
 ./fullstack
 wait
 ```
@@ -82,7 +82,7 @@ wait
 ### 阶段二：从全局统计入手
 
 ```bash
-TP="lib/perfetto/trace_processor_shell fullstack.perfetto-trace"
+TP="../../lib/perfetto/trace_processor_shell fullstack.perfetto-trace"
 ```
 
 **第一步——看事件分布**：

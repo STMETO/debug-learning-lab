@@ -51,7 +51,7 @@ data_sources: {
 duration_ms: 4000
 EOF
 
-sudo lib/perfetto/tracebox -c sql_config.txt --txt -o sql_trace.perfetto-trace &
+sudo ../../lib/perfetto/tracebox -c sql_config.txt --txt -o sql_trace.perfetto-trace &
 ./sql_demo
 wait
 ```
@@ -61,7 +61,7 @@ wait
 trace_processor 把 trace 数据映射为几十张 SQL 表。先看有哪些可用：
 
 ```bash
-echo '.tables' | lib/perfetto/trace_processor_shell sql_trace.perfetto-trace
+echo '.tables' | ../../lib/perfetto/trace_processor_shell sql_trace.perfetto-trace
 ```
 
 **核心表速查**：
@@ -79,7 +79,7 @@ echo '.tables' | lib/perfetto/trace_processor_shell sql_trace.perfetto-trace
 ### 第三步：基础查询练习
 
 ```bash
-TP="lib/perfetto/trace_processor_shell sql_trace.perfetto-trace"
+TP="../../lib/perfetto/trace_processor_shell sql_trace.perfetto-trace"
 ```
 
 **查询 1：各事件的总数和占比**
@@ -167,7 +167,7 @@ second  total   syscalls  forks
 ### 第五步：用 `.dump` 导出为 SQLite 数据库
 
 ```bash
-echo '.dump sql_analysis.db' | lib/perfetto/trace_processor_shell sql_trace.perfetto-trace
+echo '.dump sql_analysis.db' | ../../lib/perfetto/trace_processor_shell sql_trace.perfetto-trace
 ```
 
 导出后可以用任何 SQLite 工具分析：

@@ -75,9 +75,7 @@ EOF
 ### 第二步：录制并查看事件分布
 
 ```bash
-sudo lib/perfetto/tracebox -c ftrace_config.txt --txt -o ftrace_trace.perfetto-trace &
-./ftrace_demo
-wait
+sudo ../../../../lib/perfetto/tracebox -c ftrace_config.txt --txt -o ftrace_trace.perfetto-trace & ./ftrace_demo ; wait
 ```
 
 用 SQL 统计每种事件的数量：
@@ -86,7 +84,7 @@ wait
 echo 'SELECT name, count(*) as cnt
 FROM ftrace_event
 GROUP BY name
-ORDER BY cnt DESC;' | lib/perfetto/trace_processor_shell ftrace_trace.perfetto-trace
+ORDER BY cnt DESC;' | ../../lib/perfetto/trace_processor_shell ftrace_trace.perfetto-trace
 ```
 
 输出：
@@ -149,7 +147,7 @@ JOIN ftrace_event s
 WHERE f.name = 'sched_process_fork'
   AND s.name LIKE 'sched_%'
 LIMIT 10;
-" | lib/perfetto/trace_processor_shell ftrace_trace.perfetto-trace
+" | ../../lib/perfetto/trace_processor_shell ftrace_trace.perfetto-trace
 ```
 
 > 这就是 Perfetto 的核心价值——**SQL 让你跨事件类型做关联分析**，这在本机 ftrace 中需要手动写复杂的 awk/sed 脚本。
