@@ -46,6 +46,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     iproute2 \
     psmisc \
     netcat-openbsd \
+    iputils-ping \
+    traceroute \
+    tcpdump \
     # ---- 编辑器 ----
     vim \
     nano \

@@ -13,6 +13,7 @@
 | [构建系统](build/)（Makefile / CMake） | C/C++ 构建、链接、测试与构建诊断 | ✅ 14 个实验全部就绪 |
 | [ELF 与链接](elf/) | 二进制结构、符号、静态/动态链接与加载器诊断 | ✅ 12 个实验全部就绪 |
 | [Linux 现场排障](linux/) | 进程、资源、procfs、日志、文件与网络现场收集 | ✅ 12 个实验全部就绪 |
+| [网络排障](network/)（tcpdump） | 路由、DNS、TCP/UDP、HTTP 与抓包分析 | ✅ 12 个实验全部就绪 |
 | [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
 | [ltrace](ltrace/) | 库函数调用追踪 | ✅ 6 个实验全部就绪 |
 | [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
@@ -21,7 +22,7 @@
 | [Perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | ✅ 9 个实验全部就绪（含 UI 指南） |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 
-当前共包含 **111 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、Linux 现场排障 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
+当前共包含 **123 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、Linux 现场排障 12 个、网络排障 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
 
 ## 项目结构
 
@@ -32,6 +33,7 @@ debug-learning-lab/
 ├── build/                # Makefile / CMake 构建系统（✅ 14 个实验）
 ├── elf/                  # ELF、符号与动态链接（✅ 12 个实验）
 ├── linux/                # Linux 现场排障与命令行工具（✅ 12 个实验）
+├── network/              # 网络排障与 tcpdump（✅ 12 个实验）
 ├── strace/               # strace 系统调用追踪（✅ 8 个实验）
 ├── ltrace/               # ltrace 库函数调用追踪（✅ 6 个实验）
 ├── valgrind/             # Valgrind 内存错误检测（✅ 5 个实验）
@@ -103,13 +105,14 @@ docker run -it --privileged \
 1. **构建系统** — 先理解编译、链接、调试符号与 Debug/Release 构建
 2. **ELF 与链接** — 看懂符号、调试信息、库依赖与动态加载过程
 3. **Linux 现场排障** — 用命令行收集进程、资源、文件、日志和端口证据
-4. **GDB** — 从源码级调试开始，建立最直观的调试心智模型
-5. **ASan** — 理解内存错误类型及其检测原理
-6. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
-7. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
-8. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
-9. **ftrace** — 内核函数全量追踪，微秒级延迟分析
-10. **Perfetto** — 把内核事件、CPU 采样和应用埋点放到同一条时间线上分析
+4. **网络排障** — 用 `ss`、tcpdump、DNS 和 HTTP 证据定位连接问题
+5. **GDB** — 从源码级调试开始，建立最直观的调试心智模型
+6. **ASan** — 理解内存错误类型及其检测原理
+7. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
+8. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
+9. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
+10. **ftrace** — 内核函数全量追踪，微秒级延迟分析
+11. **Perfetto** — 把内核事件、CPU 采样和应用埋点放到同一条时间线上分析
 
 构建系统模块与 GDB、ASan 的联系最紧密；如果你已经完成它们，也可以按需要交叉学习。
 
@@ -121,9 +124,9 @@ docker run -it --privileged \
 |-------------|----------|----------|----------------|
 | ✅ 已实现 | [**Makefile 与 CMake**](build/) | 编译、链接、Debug/Release、Sanitizer、测试、安装、Preset 与构建诊断 | 14 个实验已覆盖从单文件到库、工程化配置和真实构建错误排查 |
 | ✅ 已实现 | [**Linux 调试必备命令**](linux/) | 进程、资源、procfs、`find`、文本管道、`lsof`、`ss`、环境与日志 | 12 个实验围绕服务现场收集证据，而非零散罗列命令 |
+| ✅ 已实现 | [**网络排障与 tcpdump**](network/) | 路由、DNS、TCP/UDP、HTTP、BPF 过滤、pcap 与 Wireshark | 12 个实验以 loopback 为主，覆盖从 socket 状态到报文证据的完整链路 |
 | ✅ 已实现 | [**ELF、符号与动态链接工具**](elf/) | `file`、`ldd`、`readelf`、`nm`、`objdump`、`strings`、`addr2line`、`LD_DEBUG` | 12 个实验覆盖二进制结构、符号、调试信息、静态/动态库与综合排障 |
 | P1 | **Git 调试工作流** | `log`、`diff`、`blame`、`bisect`、标签和回退 | 解决“什么时候引入了 bug”和“哪个提交改变了行为”，把单次定位扩展到版本历史 |
-| P2 | **Linux 网络排障** | `ss`、`ip`、`lsof`、`tcpdump`、过滤表达式、抓包与程序日志对照 | 适合在掌握 strace 后继续学习连接、协议和线上网络问题定位 |
 | P2 | **Protobuf 调试** | `.proto`、`protoc`、C++ 生成代码、字段兼容性、二进制消息抓取与解析 | 依赖构建系统和基础二进制知识，适合放在工程化和网络排障之后 |
 
 构建系统模块已经为后续 `readelf`、`nm`、`ldd` 与 Protobuf 教程准备了构建基础。Linux 常见命令建议作为下一项 P0 内容，先服务于后续实验，不建议一开始写成覆盖所有命令的大而全手册。
