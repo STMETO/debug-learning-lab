@@ -1,0 +1,5 @@
+*
+!.gitignore
+!README.md
+!CMakeLists.txt
+!buggy.c
