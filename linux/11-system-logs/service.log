@@ -1,0 +1,3 @@
+Jul 30 10:00:01 demo-service[101]: INFO starting
+Jul 30 10:00:02 demo-service[101]: ERROR failed to open /etc/demo.conf: Permission denied
+Jul 30 10:00:03 demo-service[101]: INFO shutting down

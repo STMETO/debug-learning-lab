@@ -1,0 +1,6 @@
+*
+!.gitignore
+!README.md
+!Makefile
+!service.c
+!demo.conf

@@ -1,0 +1,5 @@
+2026-07-30T10:00:01Z INFO request id=a1 path=/health latency_ms=2
+2026-07-30T10:00:02Z ERROR request id=a2 path=/orders latency_ms=503 status=500
+2026-07-30T10:00:03Z WARN request id=a3 path=/orders latency_ms=120 status=429
+2026-07-30T10:00:04Z ERROR request id=a4 path=/orders latency_ms=487 status=500
+2026-07-30T10:00:05Z INFO request id=a5 path=/health latency_ms=3

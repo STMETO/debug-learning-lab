@@ -43,6 +43,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     lsof \
+    iproute2 \
+    psmisc \
     netcat-openbsd \
     # ---- 编辑器 ----
     vim \
