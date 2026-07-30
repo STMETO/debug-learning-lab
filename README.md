@@ -15,6 +15,7 @@
 | [Linux 现场排障](linux/) | 进程、资源、procfs、日志、文件与网络现场收集 | ✅ 12 个实验全部就绪 |
 | [网络排障](network/)（tcpdump） | 路由、DNS、TCP/UDP、HTTP 与抓包分析 | ✅ 12 个实验全部就绪 |
 | [Git](git/) | 版本控制基础、历史追踪与回归定位 | ✅ 12 个实验全部就绪 |
+| [Protobuf](protobuf/) | Schema、C++ 代码生成、序列化与兼容性诊断 | ✅ 12 个实验全部就绪 |
 | [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
 | [ltrace](ltrace/) | 库函数调用追踪 | ✅ 6 个实验全部就绪 |
 | [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
@@ -23,7 +24,7 @@
 | [Perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | ✅ 9 个实验全部就绪（含 UI 指南） |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 
-当前共包含 **135 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、Linux 现场排障 12 个、网络排障 12 个、Git 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
+当前共包含 **147 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、Linux 现场排障 12 个、网络排障 12 个、Git 12 个、Protobuf 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
 
 ## 项目结构
 
@@ -36,6 +37,7 @@ debug-learning-lab/
 ├── linux/                # Linux 现场排障与命令行工具（✅ 12 个实验）
 ├── network/              # 网络排障与 tcpdump（✅ 12 个实验）
 ├── git/                  # Git 基础与版本定位（✅ 12 个实验）
+├── protobuf/             # Protobuf C++ 与协议诊断（✅ 12 个实验）
 ├── strace/               # strace 系统调用追踪（✅ 8 个实验）
 ├── ltrace/               # ltrace 库函数调用追踪（✅ 6 个实验）
 ├── valgrind/             # Valgrind 内存错误检测（✅ 5 个实验）
@@ -130,7 +132,7 @@ docker run -it --privileged \
 | ✅ 已实现 | [**网络排障与 tcpdump**](network/) | 路由、DNS、TCP/UDP、HTTP、BPF 过滤、pcap 与 Wireshark | 12 个实验以 loopback 为主，覆盖从 socket 状态到报文证据的完整链路 |
 | ✅ 已实现 | [**ELF、符号与动态链接工具**](elf/) | `file`、`ldd`、`readelf`、`nm`、`objdump`、`strings`、`addr2line`、`LD_DEBUG` | 12 个实验覆盖二进制结构、符号、调试信息、静态/动态库与综合排障 |
 | ✅ 已实现 | [**Git 调试工作流**](git/) | `log`、`diff`、`blame`、`bisect`、标签、恢复与 worktree | 12 个实验覆盖基础协作与版本回归定位 |
-| P2 | **Protobuf 调试** | `.proto`、`protoc`、C++ 生成代码、字段兼容性、二进制消息抓取与解析 | 依赖构建系统和基础二进制知识，适合放在工程化和网络排障之后 |
+| ✅ 已实现 | [**Protobuf 调试**](protobuf/) | `.proto`、`protoc`、C++ 生成代码、序列化、兼容性与二进制检查 | 12 个实验从基础 schema 递进到协议演进和解析失败诊断 |
 
 构建系统、ELF、Linux 现场排障与网络模块已为后续 Protobuf 调试教程准备了构建、二进制和网络基础。
 

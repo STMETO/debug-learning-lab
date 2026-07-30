@@ -27,6 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     build-essential \
     pkg-config \
+    protobuf-compiler \
+    libprotobuf-dev \
     # ---- 调试工具 ----
     strace \
     ltrace \
