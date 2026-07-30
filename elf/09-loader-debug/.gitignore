@@ -1,0 +1,6 @@
+*
+!.gitignore
+!README.md
+!Makefile
+!main.c
+!plugin.c

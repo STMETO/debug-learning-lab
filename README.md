@@ -11,6 +11,7 @@
 | [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 12 个实验全部就绪 |
 | [ASan](asan/) (AddressSanitizer) | 内存错误检测 | ✅ 10 个实验全部就绪 |
 | [构建系统](build/)（Makefile / CMake） | C/C++ 构建、链接、测试与构建诊断 | ✅ 14 个实验全部就绪 |
+| [ELF 与链接](elf/) | 二进制结构、符号、静态/动态链接与加载器诊断 | ✅ 12 个实验全部就绪 |
 | [strace](strace/) | 系统调用追踪 | ✅ 8 个实验全部就绪 |
 | [ltrace](ltrace/) | 库函数调用追踪 | ✅ 6 个实验全部就绪 |
 | [Valgrind](valgrind/) | 内存错误与泄漏检测 | ✅ 5 个实验全部就绪 |
@@ -19,7 +20,7 @@
 | [Perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | ✅ 9 个实验全部就绪（含 UI 指南） |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 
-当前共包含 **87 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
+当前共包含 **99 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
 
 ## 项目结构
 
@@ -28,6 +29,7 @@ debug-learning-lab/
 ├── gdb/                  # GDB 调试实验（✅ 12 个实验）
 ├── asan/                 # ASan 内存检测实验（✅ 10 个实验）
 ├── build/                # Makefile / CMake 构建系统（✅ 14 个实验）
+├── elf/                  # ELF、符号与动态链接（✅ 12 个实验）
 ├── strace/               # strace 系统调用追踪（✅ 8 个实验）
 ├── ltrace/               # ltrace 库函数调用追踪（✅ 6 个实验）
 ├── valgrind/             # Valgrind 内存错误检测（✅ 5 个实验）
@@ -49,7 +51,7 @@ debug-learning-lab/
 
 ```bash
 # Ubuntu/Debian
-sudo apt install gdb gcc build-essential cmake ninja-build
+sudo apt install gdb gcc build-essential cmake ninja-build binutils file
 
 # 验证安装
 gdb --version
@@ -97,13 +99,14 @@ docker run -it --privileged \
 ## 学习路线
 
 1. **构建系统** — 先理解编译、链接、调试符号与 Debug/Release 构建
-2. **GDB** — 从源码级调试开始，建立最直观的调试心智模型
-3. **ASan** — 理解内存错误类型及其检测原理
-4. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
-5. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
-6. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
-7. **ftrace** — 内核函数全量追踪，微秒级延迟分析
-8. **Perfetto** — 把内核事件、CPU 采样和应用埋点放到同一条时间线上分析
+2. **ELF 与链接** — 看懂符号、调试信息、库依赖与动态加载过程
+3. **GDB** — 从源码级调试开始，建立最直观的调试心智模型
+4. **ASan** — 理解内存错误类型及其检测原理
+5. **strace / ltrace** — 从系统调用和库调用层面观察程序行为
+6. **Valgrind** — 不重编译的内存检测，未初始化值等独家能力
+7. **perf** — 从 CPU 角度分析性能瓶颈，深入内核事件追踪
+8. **ftrace** — 内核函数全量追踪，微秒级延迟分析
+9. **Perfetto** — 把内核事件、CPU 采样和应用埋点放到同一条时间线上分析
 
 构建系统模块与 GDB、ASan 的联系最紧密；如果你已经完成它们，也可以按需要交叉学习。
 
@@ -115,7 +118,7 @@ docker run -it --privileged \
 |-------------|----------|----------|----------------|
 | ✅ 已实现 | [**Makefile 与 CMake**](build/) | 编译、链接、Debug/Release、Sanitizer、测试、安装、Preset 与构建诊断 | 14 个实验已覆盖从单文件到库、工程化配置和真实构建错误排查 |
 | P0 | **Linux 调试必备命令** | `find`、`grep`、`awk`、`sed`、管道重定向、权限、进程和环境变量 | 这些命令是运行实验、收集现场信息和组合调试工具的基础能力 |
-| P1 | **ELF、符号与动态链接工具** | `file`、`ldd`、`readelf`、`nm`、`objdump`、`strings`、`addr2line` | 与 GDB、core dump、ASan、动态库问题直接衔接，能解释二进制“里面有什么” |
+| ✅ 已实现 | [**ELF、符号与动态链接工具**](elf/) | `file`、`ldd`、`readelf`、`nm`、`objdump`、`strings`、`addr2line`、`LD_DEBUG` | 12 个实验覆盖二进制结构、符号、调试信息、静态/动态库与综合排障 |
 | P1 | **Git 调试工作流** | `log`、`diff`、`blame`、`bisect`、标签和回退 | 解决“什么时候引入了 bug”和“哪个提交改变了行为”，把单次定位扩展到版本历史 |
 | P2 | **Linux 网络排障** | `ss`、`ip`、`lsof`、`tcpdump`、过滤表达式、抓包与程序日志对照 | 适合在掌握 strace 后继续学习连接、协议和线上网络问题定位 |
 | P2 | **Protobuf 调试** | `.proto`、`protoc`、C++ 生成代码、字段兼容性、二进制消息抓取与解析 | 依赖构建系统和基础二进制知识，适合放在工程化和网络排障之后 |

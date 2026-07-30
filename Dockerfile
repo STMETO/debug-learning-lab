@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ltrace \
     valgrind \
     binutils \
+    file \
     # ---- 性能分析 ----
     linux-tools-generic \
     linux-tools-common \
