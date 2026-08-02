@@ -1,0 +1,8 @@
+*
+!.gitignore
+!README.md
+!CMakeLists.txt
+!calc.c
+!calc.h
+!main.c
+!test_calc.c

@@ -10,7 +10,7 @@
 |------|------|------|
 | [GDB](gdb/) | C/C++ 源码级调试器 | ✅ 12 个实验全部就绪 |
 | [ASan](asan/) (AddressSanitizer) | 内存错误检测 | ✅ 10 个实验全部就绪 |
-| [构建系统](build/)（Makefile / CMake） | C/C++ 构建、链接、测试与构建诊断 | ✅ 14 个实验全部就绪 |
+| [构建系统](build/)（Makefile / CMake） | C/C++ 构建、链接、测试与构建诊断 | ✅ 22 个实验全部就绪 |
 | [ELF 与链接](elf/) | 二进制结构、符号、静态/动态链接与加载器诊断 | ✅ 12 个实验全部就绪 |
 | [Linux 现场排障](linux/) | 进程、资源、procfs、日志、文件与网络现场收集 | ✅ 12 个实验全部就绪 |
 | [网络排障](network/)（tcpdump） | 路由、DNS、TCP/UDP、HTTP 与抓包分析 | ✅ 12 个实验全部就绪 |
@@ -24,7 +24,7 @@
 | [Perfetto](perfetto/) | 系统级全栈追踪与 SQL 分析 | ✅ 9 个实验全部就绪（含 UI 指南） |
 | bpftrace / eBPF | 动态内核/用户态追踪 | ⏸️ WSL2 内核无 BTF 支持，跳过 |
 
-当前共包含 **147 个实验**：GDB 12 个、ASan 10 个、构建系统 14 个、ELF 与链接 12 个、Linux 现场排障 12 个、网络排障 12 个、Git 12 个、Protobuf 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
+当前共包含 **155 个实验**：GDB 12 个、ASan 10 个、构建系统 22 个、ELF 与链接 12 个、Linux 现场排障 12 个、网络排障 12 个、Git 12 个、Protobuf 12 个、strace 8 个、ltrace 6 个、Valgrind 5 个、perf 13 个、ftrace 10 个、Perfetto 9 个。
 
 ## 项目结构
 
@@ -32,7 +32,7 @@
 debug-learning-lab/
 ├── gdb/                  # GDB 调试实验（✅ 12 个实验）
 ├── asan/                 # ASan 内存检测实验（✅ 10 个实验）
-├── build/                # Makefile / CMake 构建系统（✅ 14 个实验）
+├── build/                # Makefile / CMake 构建系统（✅ 22 个实验）
 ├── elf/                  # ELF、符号与动态链接（✅ 12 个实验）
 ├── linux/                # Linux 现场排障与命令行工具（✅ 12 个实验）
 ├── network/              # 网络排障与 tcpdump（✅ 12 个实验）
@@ -127,7 +127,7 @@ docker run -it --privileged \
 
 | 状态/优先级 | 教程主题 | 推荐范围 | 为什么排在这里 |
 |-------------|----------|----------|----------------|
-| ✅ 已实现 | [**Makefile 与 CMake**](build/) | 编译、链接、Debug/Release、Sanitizer、测试、安装、Preset 与构建诊断 | 14 个实验已覆盖从单文件到库、工程化配置和真实构建错误排查 |
+| ✅ 已实现 | [**Makefile 与 CMake**](build/) | 规则与变量、增量构建、库、Debug/Release、Sanitizer、测试、安装与 Preset | 22 个实验从基础语法递进到多文件项目、target 依赖传播和双构建系统综合实践 |
 | ✅ 已实现 | [**Linux 调试必备命令**](linux/) | 进程、资源、procfs、`find`、文本管道、`lsof`、`ss`、环境与日志 | 12 个实验围绕服务现场收集证据，而非零散罗列命令 |
 | ✅ 已实现 | [**网络排障与 tcpdump**](network/) | 路由、DNS、TCP/UDP、HTTP、BPF 过滤、pcap 与 Wireshark | 12 个实验以 loopback 为主，覆盖从 socket 状态到报文证据的完整链路 |
 | ✅ 已实现 | [**ELF、符号与动态链接工具**](elf/) | `file`、`ldd`、`readelf`、`nm`、`objdump`、`strings`、`addr2line`、`LD_DEBUG` | 12 个实验覆盖二进制结构、符号、调试信息、静态/动态库与综合排障 |

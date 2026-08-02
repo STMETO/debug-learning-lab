@@ -1,8 +1,0 @@
-*
-!.gitignore
-!README.md
-!Makefile
-!src/
-!src/**
-!include/
-!include/**

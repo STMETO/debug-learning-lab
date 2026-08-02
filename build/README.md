@@ -1,93 +1,55 @@
-# 构建系统：Makefile 与 CMake
+# Makefile 与 CMake：从语法到工程实践
 
-## 写给谁？
+本模块只讲 Makefile 和 CMake。它不重复教授 Linux 命令或 C/C++ 语法，但会从两种构建系统各自最基础的语法开始。
 
-这个模块面向已经会编译 C/C++ 程序、并希望理解“程序为什么能被调试”的学习者。它和 GDB、ASan、Valgrind 模块紧密相连：调试器能否看到源码和变量，Sanitizer 能否正确运行，往往首先取决于构建配置。
+## 前置知识
 
-> 构建系统不是把一条 gcc 命令藏起来；它是在维护一张“源码、头文件、库、编译选项、产物”之间的依赖图。
+开始前需要：
 
-## 你会获得什么
+- 会使用基本 Linux 命令和 shell；
+- 能读懂简单 C/C++ 程序；
+- 知道源文件、头文件、目标文件、静态库、动态库和可执行文件的区别；
+- 理解预处理、编译、汇编、链接的大致含义；
+- 用过 `gcc -c main.c -o main.o` 和 `gcc main.o -o app`；
+- 大致知道 `-I`、`-L`、`-l`、`-g`、`-O0` 的用途。
 
-完成本模块后，你应当能够：
+## 学习路线
 
-- 看懂从 .c 到 .o、再到可执行文件和动态库的过程；
-- 用 Makefile 管理自动依赖、库、Debug/Release/ASan 构建；
-- 用现代 CMake 的 target 模型组织中小型 C/C++ 项目；
-- 用 CTest、install、Presets 建立可复现的构建流程；
-- 遇到 undefined reference、缺失符号、找不到动态库时，知道从哪一层排查。
+### Makefile 基础（01–06）
 
-## 学习路线图
+| # | 实验 | 新知识 |
+|---|------|--------|
+| [01](01-first-makefile/) | 第一份 Makefile | `make`、默认目标 |
+| [02](02-rule-syntax/) | 规则语法 | target、prerequisite、recipe、Tab |
+| [03](03-incremental-build/) | 增量构建 | 时间戳、依赖、`-B` |
+| [04](04-variables/) | 变量 | `= := ?= +=`、命令行覆盖 |
+| [05](05-automatic-variables/) | 自动变量 | `$@`、`$<`、`$^`、`$?` |
+| [06](06-phony-targets/) | 操作目标 | `.PHONY`、all、run、clean、help |
 
-### 🟢 阶段一：先理解构建发生了什么（01–03）
+### Makefile 工程实践（07–13）
 
-| # | 实验 | 你会学到 | 时长 |
-|---|------|----------|------|
-| [01](01-from-source/) | 从源码到程序 | 预处理、编译、汇编、链接和调试符号 | ~20min |
-| [02](02-makefile-basics/) | Makefile 基础 | target、依赖、变量、自动变量与增量构建 | ~20min |
-| [03](03-makefile-dependencies/) | 自动头文件依赖 | 模式规则、.d 文件、-MMD -MP 与并行构建 | ~25min |
+| # | 实验 | 新知识 |
+|---|------|--------|
+| [07](07-multifile/) | 多文件项目 | 分别编译、统一链接 |
+| [08](08-pattern-rules/) | 模式规则 | `%`、wildcard、patsubst |
+| [09](09-auto-dependencies/) | 头文件依赖 | `-MMD -MP`、`.d`、`-include` |
+| [10](10-directories-parallel/) | 目录与并行 | build 目录、`|`、`-j`、`-n` |
+| [11](11-build-modes/) | 构建模式 | Debug、Release、ASan |
+| [12](12-libraries/) | 库 | `.a`、`.so`、链接顺序、rpath |
+| [13](13-make-engineering/) | 工程化 | 测试、公共规则、反模式 |
 
-### 🟡 阶段二：Makefile 工程实践（04–06）
+### CMake（14–22）
 
-| # | 实验 | 你会学到 | 时长 |
-|---|------|----------|------|
-| [04](04-makefile-libraries/) | 静态库与动态库 | ar、-l、rpath 与运行时加载 | ~30min |
-| [05](05-makefile-debug/) | 可调试构建 | Debug/Release/ASan、优化和符号 | ~25min |
-| [06](06-makefile-engineering/) | 小型工程组织 | build 目录、test、help 和非递归 Make | ~30min |
+| # | 实验 | 新知识 |
+|---|------|--------|
+| [14](14-cmake-model/) | CMake 模型 | 配置、生成、构建、generator |
+| [15](15-first-cmake/) | 第一份 CMakeLists | project、add_executable |
+| [16](16-cmake-language/) | CMake 语法 | 变量、列表、option、if、Cache |
+| [17](17-cmake-targets/) | target 思维 | sources、include、options |
+| [18](18-cmake-directories/) | 多目录 | add_subdirectory |
+| [19](19-cmake-libraries/) | 库与传播 | STATIC/SHARED、PUBLIC/PRIVATE/INTERFACE |
+| [20](20-cmake-configurations/) | 构建配置 | Debug、Release、ASan |
+| [21](21-cmake-test-install/) | 测试与安装 | CTest、install、find_package |
+| [22](22-presets-comparison/) | Presets 与综合对比 | Preset、双构建、故障诊断 |
 
-### 🟠 阶段三：CMake 的 target 思维（07–12）
-
-| # | 实验 | 你会学到 | 时长 |
-|---|------|----------|------|
-| [07](07-cmake-basics/) | CMake 入门 | 配置阶段、生成阶段、out-of-source 构建 | ~20min |
-| [08](08-cmake-targets/) | target 与作用域 | PUBLIC/PRIVATE/INTERFACE 与依赖传播 | ~30min |
-| [09](09-cmake-libraries/) | CMake 库项目 | 静态库、动态库、链接与 rpath | ~25min |
-| [10](10-cmake-configurations/) | 调试配置 | build type、Sanitizer、compile_commands.json | ~30min |
-| [11](11-cmake-testing-install/) | 测试与安装 | CTest、install、可消费的库 | ~30min |
-| [12](12-cmake-presets/) | Presets 与工具链 | 可复现配置、Ninja、工具链文件 | ~25min |
-
-### 🔴 阶段四：把知识用于排障（13–14）
-
-| # | 实验 | 你会学到 | 时长 |
-|---|------|----------|------|
-| [13](13-make-cmake-compare/) | 同项目双构建 | Makefile 与 CMake 的能力边界和取舍 | ~20min |
-| [14](14-build-diagnosis/) | 构建错误诊断 | undefined reference、重复定义、符号缺失、动态库问题 | ~35min |
-
-## 环境要求
-
-- GCC 或 Clang，建议 GCC 9+；
-- GNU Make 4+；
-- CMake 3.21+；实验 12 另外推荐 Ninja；
-- 可选：GDB、readelf、nm、ldd（后续二进制工具教程会专门讲解）。
-
-~~~bash
-# Ubuntu/Debian
-sudo apt install build-essential cmake ninja-build gdb
-
-gcc --version
-make --version
-cmake --version
-~~~
-
-## 两个工具的关系
-
-~~~text
-源文件 + 头文件 + 库 + 编译选项
-                 │
-        ┌────────┴────────┐
-        │                 │
-    Makefile          CMakeLists.txt
-        │                 │
-     make            cmake -S -B
-        │                 │
-        └───── 具体构建后端 ─────┘
-                 │
-        Make / Ninja / IDE 工程
-                 │
-            可执行文件、库、测试
-~~~
-
-Make 是“执行规则”的构建工具；CMake 是“描述项目”的生成器。CMake 可以生成 Makefile，也可以生成 Ninja 或 IDE 工程。两者并非替代关系，但项目通常只维护其中一种作为主要入口。
-
-## 开始
-
-从 [实验 01：从源码到程序](01-from-source/) 开始。先亲手执行一次 gcc 的四个阶段，后面的 Makefile 和 CMake 才不会变成需要死记的语法。
+建议按顺序学习。01–06 每节只引入少量 Makefile 语法，后面的实验会反复使用它们。
