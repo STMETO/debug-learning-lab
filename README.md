@@ -142,3 +142,7 @@ docker run -it --privileged \
 - `README.md` — 实验目标、步骤、思考题
 - 示例源码
 - Makefile（如适用）
+
+TodoList:
+    1.增加设备树插件的教程
+    2.重构不合理的教程
